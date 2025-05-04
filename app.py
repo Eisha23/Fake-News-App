@@ -7,7 +7,7 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from scipy.sparse import hstack
 
-# Check and download NLTK resources if they don't exist
+# Download necessary NLTK resources if not already downloaded
 def download_nltk_resources():
     try:
         nltk.data.find('tokenizers/punkt')
@@ -19,24 +19,25 @@ def download_nltk_resources():
     except LookupError:
         nltk.download('stopwords')
 
-# Call the function to ensure resources are available
-download_nltk_resources()
-
-# Load model and vectorizers
-model = joblib.load('nb_model.pkl')
-vectorizer_title = joblib.load('tfidf_title.pkl')
-vectorizer_text = joblib.load('tfidf_text.pkl')
-
-# Preprocessing
+# Preprocessing function
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
 
 def preprocess_text(text):
+    # Download resources within the function, ensuring they're available when needed
+    download_nltk_resources()
+    
+    # Preprocess the text
     text = text.lower()
-    text = re.sub(r'[^a-zAZ\s]', '', text)
-    tokens = word_tokenize(text)
+    text = re.sub(r'[^a-zA-Z\s]', '', text)  # Remove non-alphabetical characters
+    tokens = word_tokenize(text)  # Tokenize the text
     tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words]
     return ' '.join(tokens)
+
+# Load the trained model and vectorizers
+model = joblib.load('nb_model.pkl')
+vectorizer_title = joblib.load('tfidf_title.pkl')
+vectorizer_text = joblib.load('tfidf_text.pkl')
 
 # Streamlit app UI
 st.title("Fake News Detection")
@@ -57,7 +58,5 @@ if st.button("Predict"):
         final_input = hstack([vec_title, vec_text])
 
         prediction = model.predict(final_input)[0]
-        label = "FAKE" if prediction == 0 else "REAL"
-        st.success(f"The news article is **{label.upper()}**.")
+        st.success(f"The news article is **{prediction.upper()}**.")
 
-      

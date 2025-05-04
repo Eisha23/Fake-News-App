@@ -11,18 +11,9 @@ from scipy.sparse import hstack
 # Download NLTK resources safely
 def download_nltk_resources():
     nltk.download('punkt_tab')
-    try:
-        nltk.data.find('tokenizers/punkt')
-    except LookupError:
-        nltk.download('punkt')
-    try:
-        nltk.data.find('corpora/stopwords')
-    except LookupError:
-        nltk.download('stopwords')
-    try:
-        nltk.data.find('corpora/wordnet')
-    except LookupError:
-        nltk.download('wordnet')
+    nltk.download('punkt')
+    nltk.download('stopwords')
+    nltk.download('wordnet')
 
 # Text preprocessing
 def preprocess_text(text):

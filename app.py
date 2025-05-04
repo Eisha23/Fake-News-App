@@ -10,6 +10,7 @@ from scipy.sparse import hstack
 
 # Download NLTK resources safely
 def download_nltk_resources():
+    nltk.download('punkt_tab')
     try:
         nltk.data.find('tokenizers/punkt')
     except LookupError:

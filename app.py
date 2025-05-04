@@ -7,8 +7,9 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from scipy.sparse import hstack
 
-# Add local nltk_data path (if using local nltk_data)
-# nltk.data.path.append('path_to_your_nltk_data')
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('wordnet')
 
 # Load model and vectorizers
 model = joblib.load('nb_model.pkl')

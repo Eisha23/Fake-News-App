@@ -7,9 +7,20 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from scipy.sparse import hstack
 
-nltk.download('stopwords')
-nltk.download('punkt')
-nltk.download('wordnet')
+# Check and download NLTK resources if they don't exist
+def download_nltk_resources():
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        nltk.download('punkt')
+
+    try:
+        nltk.data.find('corpora/stopwords')
+    except LookupError:
+        nltk.download('stopwords')
+
+# Call the function to ensure resources are available
+download_nltk_resources()
 
 # Load model and vectorizers
 model = joblib.load('nb_model.pkl')
